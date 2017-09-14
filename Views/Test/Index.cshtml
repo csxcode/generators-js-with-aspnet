@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Promises + Generators (Synchronous Javascript)";
+}
+
+<h2>Promises + Generators (Synchronous Javascript)</h2>
+<hr />
+<button type="button" class="btn btn-success" id="getdata">Get Data</button>
+
+@section scripts
+{
+<script>
+
+    //Based on: https://gist.github.com/learncodeacademy/bf04432597334190bef4    
+
+    $('#getdata').click(function () {
+
+        Promise.coroutine(function* () {
+        
+            var user = yield $.get('getUser');        
+            console.log("Print features only for the user....")
+            console.log(user)
+
+            var tweets = yield $.get('getTweets', {userid: user.id});
+            console.log("Print all tweets of user...")
+            console.log(tweets);
+
+            var friends = yield $.get('getFriends', {userid: user.id});
+            console.log("Print all friends of user...")                        
+            console.log(friends);
+
+            console.log("finished!")
+
+        })().catch(function(errs){
+        
+            //handle errors on any events        
+            console.log(errs.status, errs.statusText);
+            console.log(errs);
+
+        });               
+
+    });
+           
+</script>
+}
